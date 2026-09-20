@@ -47,7 +47,7 @@ public class BlockHistoryFunctionalTests
         using var provider = BuildServiceProvider();
         var requestService = provider.GetRequiredService<BlockChain.Application.Contracts.IBlockHistoryRequestService>();
 
-        var response = await requestService.GetBlockHistoryPaged(new BlockChain.Application.Requests.GetHistoryEntryPageRequest(10, 1));
+        var response = await requestService.GetBlockHistoryPaged(new BlockChain.Application.Requests.GetHistoryEntryPageRequest(10, 1), CancellationToken.None);
 
         // Ensure method executes against real DB. We assert that call completes and returns a list (possibly empty).
         Assert.NotNull(response);

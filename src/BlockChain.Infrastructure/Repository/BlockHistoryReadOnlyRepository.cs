@@ -15,13 +15,13 @@ namespace BlockChain.Infrastructure.Repository
             _context = context;
         }
 
-        public async Task<IList<BlockHistoryBaseModel>> GetBlockHistoryPaged(GetHistoryEntryPageQuery query) 
+        public async Task<IList<BlockHistoryBaseModel>> GetBlockHistoryPaged(GetHistoryEntryPageQuery query, CancellationToken token) 
         {
             return await _context.BlockHistories
                 .OrderByDescending(b => b.CreatedAt)
                 .Skip((query.pageNumber - 1) * query.pageSize)
                 .Take(query.pageSize)
-                .ToListAsync();
+                .ToListAsync(token);
         }
 
     }

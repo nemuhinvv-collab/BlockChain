@@ -42,10 +42,5 @@ namespace BlockChain.Application.Services
             }
             return blockHistoryEntry;
         }
-        public async Task<IList<BlockHistoryQueryResponse>> GetBlockHistoryPaged(GetHistoryEntryPageRequest query)
-        {
-            var result = await _readOnlyRepository.GetBlockHistoryPaged(query.MapToGetHistoryEntryPageQuery());
-            return result.Select(x => x.MapToDefaultHistoryQueryResponse()).ToList();
-        }
     }
 }
