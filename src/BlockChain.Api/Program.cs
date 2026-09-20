@@ -1,4 +1,6 @@
 
+using BlockChain.Api.Filters;
+using BlockChain.Api.Middlewares;
 using BlockChain.Api.Policies;
 using BlockChain.Application.Registration;
 using BlockChain.Infrastructure.Registration;
@@ -15,7 +17,13 @@ namespace BlockChain
                       .AddEnvironmentVariables();
             builder.Services.RegisterApplication();
             builder.Services.RegisterInfrastructure(builder.Configuration);
-            builder.Services.AddControllers();
+            builder.Services.AddProblemDetails();
+            builder.Services.AddExceptionHandler<ExceptionHandler>();
+            builder.Services.AddControllers(p => 
+            {
+                p.Filters.Add<LoggingFilter>();
+            });
+
 
             builder.Services.AddOpenApiDocument(configure =>
             {
@@ -31,6 +39,7 @@ namespace BlockChain
             app.UseCors(DefaultCorsPolicy.PolicyName);
             app.MapHealthChecks("/health");
             app.UseOpenApi();
+            app.UseExceptionHandler();
             app.UseSwaggerUi();
 
             app.Run();

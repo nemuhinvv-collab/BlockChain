@@ -1,21 +1,23 @@
 ﻿
 using Blockchain.Application.Contracts;
-using Blockchain.Application.Models;
 using Blockchain.Application.Requests;
 using Blockchain.Application.Responses;
+using BlockChain.Application.Mappers;
 using BlockChain.Application.Responses.BaseResponse;
 
 namespace BlockChain.Application.Services
 {
-    internal class BlockHistoryService : IBlockHistoryService
+    public class BlockHistoryService : IBlockHistoryService
     {
         private readonly IBlockHistoryWriteOnlyUOW _writeOnlyRepository;
         private readonly IBlockCypherRepository _cypherRepository;
+        private readonly TimeProvider _timeProvider;
 
-        public BlockHistoryService(IBlockCypherRepository cypherRepository, IBlockHistoryWriteOnlyUOW writeOnlyRepository)
+        public BlockHistoryService(IBlockCypherRepository cypherRepository, IBlockHistoryWriteOnlyUOW writeOnlyRepository, TimeProvider timeProvider)
         {
             _cypherRepository = cypherRepository;
             _writeOnlyRepository = writeOnlyRepository;
+            _timeProvider = timeProvider;
         }
 
         public async Task<BlockHistoryBaseResponse> GetBlockCypher(CypherRequest request, CancellationToken token) 
@@ -24,10 +26,12 @@ namespace BlockChain.Application.Services
             switch(blockHistoryEntry)
             {
                 case EtheriumBlockHistoryResponse:
-                    
+                    var etheriumBlockHistoryEntry = blockHistoryEntry as EtheriumBlockHistoryResponse;
+                    await _writeOnlyRepository.SaveEtheriumBlockHistoryAsync(etheriumBlockHistoryEntry.MapToEtheriumBlockHistoryModel(_timeProvider.GetUtcNow()), token);
                     break;
                 case DefaultBlockHistoryResponse:
-                    
+                    var defaultBlockHistoryEntry = blockHistoryEntry as DefaultBlockHistoryResponse;
+                    await _writeOnlyRepository.SaveDefaultBlockHistoryAsync(defaultBlockHistoryEntry.MapToDefaultBlockHistoryModel(_timeProvider.GetUtcNow()), token);
                     break;
                 default:
                     break;

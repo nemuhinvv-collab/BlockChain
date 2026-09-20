@@ -30,9 +30,5 @@
     <ProjectReference Include="..\Blockchain.Domain\Blockchain.Domain.csproj" />
     <ProjectReference Include="..\BlockChain.Infrastructure\BlockChain.Infrastructure.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Middleware\" />
-  </ItemGroup>
   
 </Project>

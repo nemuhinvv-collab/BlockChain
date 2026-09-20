@@ -9,6 +9,7 @@ namespace BlockChain.Application.Registration
         public static void RegisterApplication(this IServiceCollection services) 
         {
             services.AddScoped<IBlockHistoryService, BlockHistoryService>();
+            services.AddSingleton(TimeProvider.System);
         }
     }
 }
