@@ -1,5 +1,5 @@
-﻿using Blockchain.Application.Models;
-using Blockchain.Application.Responses;
+﻿using BlockChain.Application.Models;
+using BlockChain.Application.Responses; 
 
 namespace BlockChain.Application.Mappers
 {
@@ -7,6 +7,9 @@ namespace BlockChain.Application.Mappers
     {
         internal static DefaultBlockHistoryModel MapToDefaultBlockHistoryModel(this DefaultBlockHistoryResponse dto, DateTimeOffset createdAt)
         {
+            if (dto is null)
+                throw new ArgumentNullException(nameof(dto));
+
             return new DefaultBlockHistoryModel
             {
                 Hash = dto.Hash,

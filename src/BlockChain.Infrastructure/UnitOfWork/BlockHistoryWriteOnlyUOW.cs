@@ -1,6 +1,6 @@
 ﻿
-using Blockchain.Application.Contracts;
-using Blockchain.Application.Models;
+using BlockChain.Application.Contracts;
+using BlockChain.Application.Models;
 
 namespace BlockChain.Infrastructure.UnitOfWork
 {

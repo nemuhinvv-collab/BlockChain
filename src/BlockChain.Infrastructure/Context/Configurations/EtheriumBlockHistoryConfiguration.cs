@@ -1,4 +1,4 @@
-﻿using Blockchain.Application.Models;
+﻿using BlockChain.Application.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

@@ -1,7 +1,7 @@
 ﻿
-using Blockchain.Application.Contracts;
-using Blockchain.Application.Requests;
-using Blockchain.Application.Responses;
+using BlockChain.Application.Contracts;
+using BlockChain.Application.Requests;
+using BlockChain.Application.Responses;
 using BlockChain.Application.Mappers;
 using BlockChain.Application.Responses.BaseResponse;
 
@@ -10,20 +10,24 @@ namespace BlockChain.Application.Services
     public class BlockHistoryService : IBlockHistoryService
     {
         private readonly IBlockHistoryWriteOnlyUOW _writeOnlyRepository;
+        private readonly IBlockHistoryReadonlyRepository _readOnlyRepository;
         private readonly IBlockCypherRepository _cypherRepository;
         private readonly TimeProvider _timeProvider;
 
-        public BlockHistoryService(IBlockCypherRepository cypherRepository, IBlockHistoryWriteOnlyUOW writeOnlyRepository, TimeProvider timeProvider)
+        public BlockHistoryService(IBlockCypherRepository cypherRepository, IBlockHistoryWriteOnlyUOW writeOnlyRepository,
+            IBlockHistoryReadonlyRepository readOnlyRepository,
+            TimeProvider timeProvider)
         {
             _cypherRepository = cypherRepository;
             _writeOnlyRepository = writeOnlyRepository;
             _timeProvider = timeProvider;
+            _readOnlyRepository = readOnlyRepository;
         }
 
-        public async Task<BlockHistoryBaseResponse> GetBlockCypher(CypherRequest request, CancellationToken token) 
+        public async Task<BlockHistoryBaseResponse?> GetBlockCypher(CypherRequest request, CancellationToken token)
         {
             var blockHistoryEntry = await _cypherRepository.GetBaseBlockHistoryAsync(request, token);
-            switch(blockHistoryEntry)
+            switch (blockHistoryEntry)
             {
                 case EtheriumBlockHistoryResponse:
                     var etheriumBlockHistoryEntry = blockHistoryEntry as EtheriumBlockHistoryResponse;
@@ -37,6 +41,11 @@ namespace BlockChain.Application.Services
                     break;
             }
             return blockHistoryEntry;
+        }
+        public async Task<IList<BlockHistoryQueryResponse>> GetBlockHistoryPaged(GetHistoryEntryPageRequest query)
+        {
+            var result = await _readOnlyRepository.GetBlockHistoryPaged(query.MapToGetHistoryEntryPageQuery());
+            return result.Select(x => x.MapToDefaultHistoryQueryResponse()).ToList();
         }
     }
 }

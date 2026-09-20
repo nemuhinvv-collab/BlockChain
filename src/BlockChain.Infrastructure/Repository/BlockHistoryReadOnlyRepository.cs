@@ -1,7 +1,6 @@
-﻿using Blockchain.Application.Contracts;
-using Blockchain.Application.Models;
-using Blockchain.Application.Models.BaseModels;
-using Blockchain.Application.Queries;
+﻿using BlockChain.Application.Contracts;
+using BlockChain.Application.Models.BaseModels;
+using BlockChain.Application.Queries;
 using BlockChain.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 

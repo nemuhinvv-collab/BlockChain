@@ -1,10 +1,7 @@
-﻿using Blockchain.Application.Contracts;
-using Blockchain.Domain.Enums;
-using Blockchain.Application.Queries;
-using Blockchain.Application.Requests;
-using Microsoft.AspNetCore.Http;
+﻿using BlockChain.Application.Contracts;
+using BlockChain.Application.Requests;
+using BlockChain.Application.Responses.BaseResponse;
 using Microsoft.AspNetCore.Mvc;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace BlockChain.Api.Controllers
 {
@@ -27,7 +24,7 @@ namespace BlockChain.Api.Controllers
         /// <response code="400">Token type or mode type is not provided or invalid</response>
 
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(BlockHistoryBaseResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetBlockChainBlocks([FromQuery]CypherRequest cypherRequest, CancellationToken token)

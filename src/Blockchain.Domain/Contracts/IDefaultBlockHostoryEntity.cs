@@ -1,4 +1,4 @@
-﻿namespace Blockchain.Domain.Contracts
+﻿namespace BlockChain.Domain.Contracts
 {
     public interface IDefaultBlockHistoryEntity
     {

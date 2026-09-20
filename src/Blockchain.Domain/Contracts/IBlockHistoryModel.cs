@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Blockchain.Domain.Contracts
+﻿
+namespace BlockChain.Domain.Contracts
 {
     public interface IBlockHistoryModel
     {

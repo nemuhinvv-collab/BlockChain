@@ -4,6 +4,7 @@ using BlockChain.Api.Middlewares;
 using BlockChain.Api.Policies;
 using BlockChain.Application.Registration;
 using BlockChain.Infrastructure.Registration;
+using System.Text.Json.Serialization;
 
 namespace BlockChain
 {
@@ -22,6 +23,9 @@ namespace BlockChain
             builder.Services.AddControllers(p => 
             {
                 p.Filters.Add<LoggingFilter>();
+            }).AddJsonOptions(o =>
+            {
+                o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
             });
 
 

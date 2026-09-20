@@ -1,47 +1,32 @@
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Blockchain.Application.Contracts;
-using Blockchain.Application.Requests;
+using BlockChain.Application.Contracts;
+using BlockChain.Application.Requests;
 using BlockChain.Application.Responses;
-using BlockChain.Application.Services;
+using BlockChain.Application.Responses.BaseResponse;
 using BlockChain.Application.Models;
+using BlockChain.Application.Services;
+using Moq;
 using Xunit;
 
 namespace BlockChain.UnitTests
 {
     public class BlockHistoryServiceTests
     {
-        private class FakeCypherRepository : IBlockCypherRepository
+        private readonly Mock<IBlockCypherRepository> _cypherMock;
+        private readonly Mock<IBlockHistoryWriteOnlyUOW> _uowMock;
+        private readonly Mock<TimeProvider> _timeProviderMock;
+        private readonly Mock<IBlockHistoryReadonlyRepository> _readOnlyRepoMock;
+        private readonly BlockHistoryService _service;
+
+        public BlockHistoryServiceTests()
         {
-            private readonly BlockHistoryBaseResponse? _response;
-            public FakeCypherRepository(BlockHistoryBaseResponse? response) => _response = response;
-            public Task<BlockHistoryBaseResponse?> GetBaseBlockHistoryAsync(CypherRequest request, CancellationToken token) => Task.FromResult(_response);
-        }
-
-        private class FakeWriteOnlyUOW : IBlockHistoryWriteOnlyUOW
-        {
-            public DefaultBlockHistoryModel? SavedDefault { get; private set; }
-            public EtheriumBlockHistoryModel? SavedEtherium { get; private set; }
-
-            public Task SaveDefaultBlockHistoryAsync(DefaultBlockHistoryModel blockHistory, CancellationToken token)
-            {
-                SavedDefault = blockHistory;
-                return Task.CompletedTask;
-            }
-
-            public Task SaveEtheriumBlockHistoryAsync(EtheriumBlockHistoryModel blockHistory, CancellationToken token)
-            {
-                SavedEtherium = blockHistory;
-                return Task.CompletedTask;
-            }
-        }
-
-        private class FixedTimeProvider : TimeProvider
-        {
-            private readonly DateTimeOffset _now;
-            public FixedTimeProvider(DateTimeOffset now) => _now = now;
-            public override DateTimeOffset GetUtcNow() => _now;
+            _cypherMock = new Mock<IBlockCypherRepository>();
+            _uowMock = new Mock<IBlockHistoryWriteOnlyUOW>();
+            _timeProviderMock = new Mock<TimeProvider>();
+            _readOnlyRepoMock = new Mock<IBlockHistoryReadonlyRepository>();
+            _service = new BlockHistoryService(_cypherMock.Object, 
+                _uowMock.Object, 
+                _readOnlyRepoMock.Object
+                , _timeProviderMock.Object);
         }
 
         [Fact]
@@ -57,20 +42,14 @@ namespace BlockChain.UnitTests
                 LowFeePerKb = 1
             };
 
-            var fakeRepo = new FakeCypherRepository(response);
-            var fakeUow = new FakeWriteOnlyUOW();
-            var timeProvider = new FixedTimeProvider(now);
+            _timeProviderMock.Setup(tp => tp.GetUtcNow()).Returns(now);
+            _cypherMock.Setup(c => c.GetBaseBlockHistoryAsync(It.IsAny<CypherRequest>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync((BlockHistoryBaseResponse?)response);
 
-            var service = new BlockHistoryService(fakeRepo, fakeUow, timeProvider);
-
-            var result = await service.GetBlockCypher(new CypherRequest(), CancellationToken.None);
+            var result = await _service.GetBlockCypher(new CypherRequest(), CancellationToken.None);
 
             Assert.Same(response, result);
-            Assert.NotNull(fakeUow.SavedDefault);
-            Assert.Equal(response.Hash, fakeUow.SavedDefault!.Hash);
-            Assert.Equal(response.Height, fakeUow.SavedDefault.Height);
-            Assert.Equal(response.HighFeePerKb, fakeUow.SavedDefault.HighFeePerKb);
-            Assert.Equal(now, fakeUow.SavedDefault.CreatedAt);
+            _uowMock.Verify(u => u.SaveDefaultBlockHistoryAsync(It.Is<DefaultBlockHistoryModel>(m => m.Hash == response.Hash && m.Height == response.Height && m.HighFeePerKb == response.HighFeePerKb && m.CreatedAt == now), It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [Fact]
@@ -86,20 +65,64 @@ namespace BlockChain.UnitTests
                 MediumGasPrice = 100
             };
 
-            var fakeRepo = new FakeCypherRepository(response);
-            var fakeUow = new FakeWriteOnlyUOW();
-            var timeProvider = new FixedTimeProvider(now);
+            _timeProviderMock.Setup(tp => tp.GetUtcNow()).Returns(now);
+            _cypherMock.Setup(c => c.GetBaseBlockHistoryAsync(It.IsAny<CypherRequest>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync((BlockHistoryBaseResponse?)response);
 
-            var service = new BlockHistoryService(fakeRepo, fakeUow, timeProvider);
-
-            var result = await service.GetBlockCypher(new CypherRequest(), CancellationToken.None);
+            var result = await _service.GetBlockCypher(new CypherRequest(), CancellationToken.None);
 
             Assert.Same(response, result);
-            Assert.NotNull(fakeUow.SavedEtherium);
-            Assert.Equal(response.Hash, fakeUow.SavedEtherium!.Hash);
-            Assert.Equal(response.Height, fakeUow.SavedEtherium.Height);
-            Assert.Equal(response.HighGasPrice, fakeUow.SavedEtherium.HighGasPrice);
-            Assert.Equal(now, fakeUow.SavedEtherium.CreatedAt);
+            _uowMock.Verify(u => u.SaveEtheriumBlockHistoryAsync(It.Is<EtheriumBlockHistoryModel>(m => m.Hash == response.Hash && m.Height == response.Height && m.HighGasPrice == response.HighGasPrice && m.CreatedAt == now), It.IsAny<CancellationToken>()), Times.Once);
+        }
+
+        [Fact]
+        public async Task GetBlockCypher_NullResponse_DoesNotSaveAndReturnsNull()
+        {
+            _cypherMock.Setup(c => c.GetBaseBlockHistoryAsync(It.IsAny<CypherRequest>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync((BlockHistoryBaseResponse?)null);
+
+            var result = await _service.GetBlockCypher(new CypherRequest(), CancellationToken.None);
+
+            Assert.Null(result);
+            _uowMock.Verify(u => u.SaveDefaultBlockHistoryAsync(It.IsAny<DefaultBlockHistoryModel>(), It.IsAny<CancellationToken>()), Times.Never);
+            _uowMock.Verify(u => u.SaveEtheriumBlockHistoryAsync(It.IsAny<EtheriumBlockHistoryModel>(), It.IsAny<CancellationToken>()), Times.Never);
+        }
+
+        [Fact]
+        public async Task GetBlockCypher_UnknownResponseType_DoesNotSave()
+        {
+            var baseResponse = new BlockHistoryBaseResponse();
+            _cypherMock.Setup(c => c.GetBaseBlockHistoryAsync(It.IsAny<CypherRequest>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync((BlockHistoryBaseResponse?)baseResponse);
+
+            var result = await _service.GetBlockCypher(new CypherRequest(), CancellationToken.None);
+
+            Assert.Same(baseResponse, result);
+            _uowMock.Verify(u => u.SaveDefaultBlockHistoryAsync(It.IsAny<DefaultBlockHistoryModel>(), It.IsAny<CancellationToken>()), Times.Never);
+            _uowMock.Verify(u => u.SaveEtheriumBlockHistoryAsync(It.IsAny<EtheriumBlockHistoryModel>(), It.IsAny<CancellationToken>()), Times.Never);
+        }
+
+        [Fact]
+        public async Task GetBlockCypher_SaveThrows_PropagatesException()
+        {
+            var now = DateTimeOffset.UtcNow;
+            var response = new DefaultBlockHistoryResponse
+            {
+                Hash = "hash-ex",
+                Height = 1,
+                HighFeePerKb = 2,
+                MediumFeePerKb = 1,
+                LowFeePerKb = 0
+            };
+
+            _timeProviderMock.Setup(tp => tp.GetUtcNow()).Returns(now);
+            _cypherMock.Setup(c => c.GetBaseBlockHistoryAsync(It.IsAny<CypherRequest>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync((BlockHistoryBaseResponse?)response);
+
+            _uowMock.Setup(u => u.SaveDefaultBlockHistoryAsync(It.IsAny<DefaultBlockHistoryModel>(), It.IsAny<CancellationToken>()))
+                .ThrowsAsync(new InvalidOperationException("save failed"));
+
+            await Assert.ThrowsAsync<InvalidOperationException>(() => _service.GetBlockCypher(new CypherRequest(), CancellationToken.None));
         }
     }
 }

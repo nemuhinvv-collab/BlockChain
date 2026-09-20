@@ -1,5 +1,5 @@
-﻿using Blockchain.Application.Models;
-using Blockchain.Application.Models.BaseModels;
+﻿using BlockChain.Application.Models;
+using BlockChain.Application.Models.BaseModels;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics.CodeAnalysis;
 

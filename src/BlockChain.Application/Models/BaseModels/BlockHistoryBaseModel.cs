@@ -1,7 +1,7 @@
-﻿using Blockchain.Domain.BaseEntity;
+﻿using BlockChain.Domain.BaseEntity;
 
 
-namespace Blockchain.Application.Models.BaseModels
+namespace BlockChain.Application.Models.BaseModels
 {
     public class BlockHistoryBaseModel : BlockHistoryBaseEntity
     {

@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
-using Blockchain.Application.Responses;
+using BlockChain.Application.Responses;
 using BlockChain.Application.Responses.BaseResponse;
 
 namespace BlockChain.Infrastructure.Extensions

@@ -1,14 +1,17 @@
 ﻿
 
-using Blockchain.Application.Models;
-using Blockchain.Application.Responses;
+using BlockChain.Application.Models;
+using BlockChain.Application.Responses;
 
 namespace BlockChain.Application.Mappers
 {
-    internal static class BlockChainHistoryModelMappers
+    internal static class EtheriumBlockHistoryModelMappers
     {
         internal static EtheriumBlockHistoryModel MapToEtheriumBlockHistoryModel(this EtheriumBlockHistoryResponse dto, DateTimeOffset createdAt)
         {
+            if (dto is null)
+                throw new ArgumentNullException(nameof(dto));
+
             return new EtheriumBlockHistoryModel
             {
                 Hash = dto.Hash,

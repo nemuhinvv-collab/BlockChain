@@ -1,6 +1,6 @@
-﻿using Blockchain.Application.Models;
+﻿using BlockChain.Application.Models;
 
-namespace Blockchain.Application.Contracts
+namespace BlockChain.Application.Contracts
 {
     public interface IBlockHistoryWriteOnlyUOW
     {
