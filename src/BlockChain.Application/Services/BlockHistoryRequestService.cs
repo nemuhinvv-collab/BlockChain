@@ -1,5 +1,4 @@
-﻿
-using BlockChain.Application.Contracts;
+﻿using BlockChain.Application.Contracts;
 using BlockChain.Application.Mappers;
 using BlockChain.Application.Requests;
 using BlockChain.Application.Responses;
@@ -13,9 +12,9 @@ namespace BlockChain.Application.Services
         {
             _readOnlyRepository = readOnlyRepository;
         }
-        public async Task<IList<BlockHistoryQueryResponse>> GetBlockHistoryPaged(GetHistoryEntryPageRequest query)
+        public async Task<IList<BlockHistoryQueryResponse>> GetBlockHistoryPaged(GetHistoryEntryPageRequest query, CancellationToken token)
         {
-            var result = await _readOnlyRepository.GetBlockHistoryPaged(query.MapToGetHistoryEntryPageQuery());
+            var result = await _readOnlyRepository.GetBlockHistoryPaged(query.MapToGetHistoryEntryPageQuery(), token);
             return result.Select(x => x.MapToDefaultHistoryQueryResponse()).ToList();
         }
     }

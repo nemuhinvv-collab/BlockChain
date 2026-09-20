@@ -6,6 +6,6 @@ namespace BlockChain.Application.Contracts
 {
     public interface IBlockHistoryReadonlyRepository
     {
-        Task<IList<BlockHistoryBaseModel>> GetBlockHistoryPaged(GetHistoryEntryPageQuery query);
+        Task<IList<BlockHistoryBaseModel>> GetBlockHistoryPaged(GetHistoryEntryPageQuery query, CancellationToken token);
     }
 }
