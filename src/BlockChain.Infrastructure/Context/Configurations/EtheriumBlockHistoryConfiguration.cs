@@ -1,12 +1,13 @@
 ﻿using Blockchain.Application.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace BlockChain.Infrastructure.Context.Configurations
 {
-    internal class EtheriumBlockHistoryConfiguration : BlockHistoryBaseModelConfiguration<EtheriumBlockHistoryModel>
+    internal class EtheriumBlockHistoryConfiguration : IEntityTypeConfiguration<EtheriumBlockHistoryModel>
     {
-        public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<EtheriumBlockHistoryModel> builder)
+        public void Configure(EntityTypeBuilder<EtheriumBlockHistoryModel> builder)
         {
-            base.Configure(builder);
             builder.Property(p => p.HighGasPrice)
                 .IsRequired();
             builder.Property(p => p.MediumGasPrice)

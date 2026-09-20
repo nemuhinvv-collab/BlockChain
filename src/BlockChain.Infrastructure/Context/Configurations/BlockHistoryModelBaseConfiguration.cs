@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace BlockChain.Infrastructure.Context.Configurations
 {
-    internal class BlockHistoryBaseModelConfiguration<T> : IEntityTypeConfiguration<T> where T : BlockHistoryBaseModel
+    internal class BlockHistoryBaseModelConfiguration : IEntityTypeConfiguration<BlockHistoryBaseModel> 
     {
-        public void Configure(EntityTypeBuilder<T> builder)
+        public void Configure(EntityTypeBuilder<BlockHistoryBaseModel> builder)
         {
             builder.HasKey(p => p.Id);
             builder.Property(p => p.Name)
