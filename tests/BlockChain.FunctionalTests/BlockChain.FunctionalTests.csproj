@@ -17,5 +17,10 @@
   <ItemGroup>
     <Using Include="Xunit" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\BlockChain.Application\BlockChain.Application.csproj" />
+    <ProjectReference Include="..\..\src\Blockchain.Domain\BlockChain.Domain.csproj" />
+    <ProjectReference Include="..\..\src\BlockChain.Infrastructure\BlockChain.Infrastructure.csproj" />
+  </ItemGroup>
 
 </Project>
