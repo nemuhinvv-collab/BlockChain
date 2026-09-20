@@ -1,8 +1,6 @@
 ﻿using BlockChain.Application.Contracts;
 using BlockChain.Application.Requests;
 using BlockChain.Application.Responses;
-using BlockChain.Application.Responses.BaseResponse;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BlockChain.Api.Controllers
@@ -23,6 +21,7 @@ namespace BlockChain.Api.Controllers
         /// Get Block history requests with results from Cypher API based on the provided query parameters.
         /// </summary>
         /// <param name="query"> The query parameters for the block history request. Contains page number and page size</param>
+        /// <param name="token"> Cancellation token to cancel the request </param>
         /// <returns>Document retrieved from Cypher API</returns>
         /// <response code="200">Contains the requested block history data</response>
         /// <response code="404">No data found </response>
@@ -31,9 +30,9 @@ namespace BlockChain.Api.Controllers
         [ProducesResponseType(typeof(IList<BlockHistoryQueryResponse>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetBlockHistoryPaged([FromQuery] GetHistoryEntryPageRequest query)
+        public async Task<IActionResult> GetBlockHistoryPaged([FromQuery] GetHistoryEntryPageRequest query, CancellationToken token)
         {
-            var result = await _blockHistoryRequestService.GetBlockHistoryPaged(query);
+            var result = await _blockHistoryRequestService.GetBlockHistoryPaged(query, token);
             return result is null || !result.Any() ? NotFound() : Ok(result);
         }
     }
