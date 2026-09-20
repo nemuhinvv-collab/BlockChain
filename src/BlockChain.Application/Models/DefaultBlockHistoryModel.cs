@@ -1,7 +1,7 @@
-﻿using Blockchain.Domain.Contracts;
-using Blockchain.Application.Models.BaseModels;
+﻿using BlockChain.Domain.Contracts;
+using BlockChain.Application.Models.BaseModels;
 
-namespace Blockchain.Application.Models
+namespace BlockChain.Application.Models
 {
     public sealed class DefaultBlockHistoryModel : BlockHistoryBaseModel, IDefaultBlockHistoryEntity
     { 

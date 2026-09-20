@@ -1,6 +1,6 @@
-﻿using Blockchain.Domain.Enums;
+﻿using BlockChain.Domain.Enums;
 
-namespace Blockchain.Application.Requests
+namespace BlockChain.Application.Requests
 {
     public sealed class CypherRequest
     {

@@ -1,8 +1,8 @@
-﻿using Blockchain.Application.Models.BaseModels;
-using Blockchain.Application.Queries;
+﻿using BlockChain.Application.Models.BaseModels;
+using BlockChain.Application.Queries;
 
 
-namespace Blockchain.Application.Contracts
+namespace BlockChain.Application.Contracts
 {
     public interface IBlockHistoryReadonlyRepository
     {

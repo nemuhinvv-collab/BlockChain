@@ -1,7 +1,7 @@
-﻿using Blockchain.Application.Requests;
+﻿using BlockChain.Application.Requests;
 using BlockChain.Application.Responses.BaseResponse;
 
-namespace Blockchain.Application.Contracts
+namespace BlockChain.Application.Contracts
 {
     public interface IBlockHistoryService
     {

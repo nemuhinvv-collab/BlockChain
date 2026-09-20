@@ -1,8 +1,7 @@
-﻿using Blockchain.Domain.BaseEntity;
-using Blockchain.Domain.Contracts;
+﻿using BlockChain.Domain.Contracts;
 using BlockChain.Application.Responses.BaseResponse;
 
-namespace Blockchain.Application.Responses
+namespace BlockChain.Application.Responses
 {
     public sealed class EtheriumBlockHistoryResponse : BlockHistoryBaseResponse, IEtheriumBlockHistoryEntity
     {

@@ -1,4 +1,4 @@
-﻿namespace Blockchain.Domain.BaseEntity
+﻿namespace BlockChain.Domain.BaseEntity
 {
     public abstract class BlockHistoryBaseEntity
     {

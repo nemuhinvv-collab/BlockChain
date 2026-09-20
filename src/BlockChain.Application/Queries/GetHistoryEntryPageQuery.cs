@@ -1,6 +1,6 @@
 ﻿
 
-namespace Blockchain.Application.Queries
+namespace BlockChain.Application.Queries
 {
     public record GetHistoryEntryPageQuery(int pageSize, int pageNumber);
 }

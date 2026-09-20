@@ -1,5 +1,5 @@
 ﻿
-namespace Blockchain.Domain.Enums
+namespace BlockChain.Domain.Enums
 {
     public enum BlockChainTypeEnum
     {

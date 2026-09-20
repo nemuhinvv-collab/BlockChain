@@ -1,6 +1,6 @@
 ﻿using BlockChain.Infrastructure.Context;
-using Blockchain.Application.Models;
-using Blockchain.Application.Contracts;
+using BlockChain.Application.Models;
+using BlockChain.Application.Contracts;
 
 namespace BlockChain.Infrastructure.Repository
 {

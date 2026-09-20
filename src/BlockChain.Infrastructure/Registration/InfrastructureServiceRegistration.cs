@@ -1,11 +1,12 @@
-﻿using BlockChain.Infrastructure.Configurations;
+﻿using BlockChain.Application.Contracts;
+using BlockChain.Infrastructure.Configurations;
 using BlockChain.Infrastructure.Context;
 using BlockChain.Infrastructure.Repository;
 using BlockChain.Infrastructure.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Blockchain.Application.Contracts;
+
 
 namespace BlockChain.Infrastructure.Registration
 {
@@ -25,7 +26,8 @@ namespace BlockChain.Infrastructure.Registration
             });
             services.AddDbContext<ReadOnlyBaseHistoryContext>(options =>
             {
-                options.UseNpgsql(configuration.GetConnectionString("BlockChainReadOnly"));
+                options.UseNpgsql(configuration.GetConnectionString("BlockChainReadOnly"),
+                    o => o.EnableRetryOnFailure(5));
             });
             services.AddHealthChecks().AddNpgSql(configuration.GetConnectionString("BlockChainSaveOnly"));
             services.AddScoped<IBlockHistoryReadonlyRepository, BlockHistoryReadOnlyRepository>();

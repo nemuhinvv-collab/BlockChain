@@ -1,4 +1,4 @@
-﻿using Blockchain.Domain.BaseEntity;
+﻿using BlockChain.Domain.BaseEntity;
 
 
 namespace BlockChain.Application.Responses.BaseResponse
