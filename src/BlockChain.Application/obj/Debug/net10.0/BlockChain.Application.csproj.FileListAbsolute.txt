@@ -1,0 +1,15 @@
+C:\Users\nvv37\source\repos\BlockChain\BlockChain.Application\bin\Debug\net10.0\BlockChain.Application.deps.json
+C:\Users\nvv37\source\repos\BlockChain\BlockChain.Application\bin\Debug\net10.0\BlockChain.Application.dll
+C:\Users\nvv37\source\repos\BlockChain\BlockChain.Application\bin\Debug\net10.0\BlockChain.Application.pdb
+C:\Users\nvv37\source\repos\BlockChain\BlockChain.Application\bin\Debug\net10.0\Blockchain.Domain.dll
+C:\Users\nvv37\source\repos\BlockChain\BlockChain.Application\bin\Debug\net10.0\Blockchain.Domain.pdb
+C:\Users\nvv37\source\repos\BlockChain\BlockChain.Application\obj\Debug\net10.0\BlockChain.Application.csproj.AssemblyReference.cache
+C:\Users\nvv37\source\repos\BlockChain\BlockChain.Application\obj\Debug\net10.0\BlockChain.Application.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\nvv37\source\repos\BlockChain\BlockChain.Application\obj\Debug\net10.0\BlockChain.Application.AssemblyInfoInputs.cache
+C:\Users\nvv37\source\repos\BlockChain\BlockChain.Application\obj\Debug\net10.0\BlockChain.Application.AssemblyInfo.cs
+C:\Users\nvv37\source\repos\BlockChain\BlockChain.Application\obj\Debug\net10.0\BlockChain.Application.csproj.CoreCompileInputs.cache
+C:\Users\nvv37\source\repos\BlockChain\BlockChain.Application\obj\Debug\net10.0\BlockCha.D7E0D62A.Up2Date
+C:\Users\nvv37\source\repos\BlockChain\BlockChain.Application\obj\Debug\net10.0\BlockChain.Application.dll
+C:\Users\nvv37\source\repos\BlockChain\BlockChain.Application\obj\Debug\net10.0\refint\BlockChain.Application.dll
+C:\Users\nvv37\source\repos\BlockChain\BlockChain.Application\obj\Debug\net10.0\BlockChain.Application.pdb
+C:\Users\nvv37\source\repos\BlockChain\BlockChain.Application\obj\Debug\net10.0\ref\BlockChain.Application.dll

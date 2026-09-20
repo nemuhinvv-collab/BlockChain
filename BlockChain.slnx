@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="src/BlockChain.Application/BlockChain.Application.csproj" Id="230d1564-b060-490f-84e9-064a19e0db34" />
+  <Project Path="src/Blockchain.Domain/Blockchain.Domain.csproj" Id="04971c2f-c79b-49cd-8538-db5c926a25d7" />
+  <Project Path="src/BlockChain.Infrastructure/BlockChain.Infrastructure.csproj" Id="cf71f376-81a8-4f76-8f2c-f95471029fa6" />
+  <Project Path="src/BlockChain.Api/BlockChain.Api.csproj" />
+</Solution>

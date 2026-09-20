@@ -1,0 +1,46 @@
+﻿using Blockchain.Domain.BaseEntity;
+using Blockchain.Domain.Responses;
+using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Text.Json.Serialization.Metadata;
+
+namespace BlockChain.Infrastructure.Extensions
+{
+    public class PolymorphicTypeResolver : DefaultJsonTypeInfoResolver
+    {
+        public override JsonTypeInfo GetTypeInfo(Type type, JsonSerializerOptions options)
+        {
+            JsonTypeInfo jsonTypeInfo = base.GetTypeInfo(type, options);
+            Type basePointType = typeof(BlockHistoryBaseEntity);
+            if (jsonTypeInfo.Type == basePointType)
+            {
+                // Регистрируем известные производные типы.
+                // Если дискриминатор отсутствует, System.Text.Json по умолчанию
+                // пытается использовать базовый тип — но он абстрактный, поэтому
+                // необходимо перехватить ситуацию и вернуть конкретный тип.
+                jsonTypeInfo.PolymorphismOptions = new JsonPolymorphismOptions
+                {
+                    TypeDiscriminatorPropertyName = "$name",
+                    IgnoreUnrecognizedTypeDiscriminators = true,
+                    // Не используем FallBackToBaseType, т.к. базовый тип абстрактный.
+                    // Вместо этого будем обрабатывать отсутствие дискриминатора
+                    // через отдельный конвертер, зарегистрированный ниже.
+                    UnknownDerivedTypeHandling = JsonUnknownDerivedTypeHandling.FailSerialization,
+                    DerivedTypes =
+                {
+                    new JsonDerivedType(typeof(EtheriumBlockHistoryResponse), "4d"),
+                    new JsonDerivedType(typeof(DefaultBlockHistoryResponse), "default")
+                }
+                };
+
+                // Регистрируем fallback-конвертер, который при отсутствии поля $name
+                // будет десериализовать в DefaultBlockHistoryResponse.
+                jsonTypeInfo.PolymorphismOptions.TryAddConverter(new BlockHistoryFallbackConverter());
+            }
+            return jsonTypeInfo;
+        }
+    }
+}
