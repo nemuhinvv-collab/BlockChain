@@ -56,7 +56,8 @@ docker compose build
 docker compose up -d
    * Using run.bat (Windows):
 run.bat
-5. Apply database migrations if required (run locally or inside the API container):
+5. Run dotnet build to restore the packages and build the solution
+6. Apply database migrations if required (run locally or inside the API container):
 dotnet ef database update --startup-project ./src/BlockChain.Api/BlockChain.Api.csproj --project ./src/BlockChain.Infrastructure/BlockChain.Infrastructure.csproj --context SaveOnlyBlockHistoryContext
 
 Note: adjust commands if the repository uses a different compose file name (for example docker-compose.yml) or custom scripts.
